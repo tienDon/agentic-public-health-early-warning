@@ -1,0 +1,33 @@
+# --- Cấu trúc Python ---
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Cấu trúc Dự án (AI/ML) ---
+# Không đẩy dữ liệu gốc và dữ liệu đã xử lý
+data/raw/
+data/processed/
+
+# Không đẩy file model nặng (nếu bạn muốn lưu trữ lâu dài, hãy dùng Git LFS)
+models/*.joblib
+models/*.pkl
+models/*.pth
+models/*.h5
+models/*.json
+
+# Kết quả chạy thử/Log
+metrics/*.json
+metrics/*.csv
+metrics/*.png
+metrics/*.txt
+reports/
+notebooks/*.ipynb_checkpoints/
+
+# --- Hệ thống & IDE ---
+.DS_Store
+.vscode/
+.idea/
+.env
+.log
