@@ -7,6 +7,13 @@ import pandas as pd
 router = APIRouter()
 service = get_inference_service()
 
+@router.get("/")
+def root():
+    return {
+        "service": "Climate Health Risk API",
+        "version": "1.0"
+    }
+
 @router.post("/predict")
 def predict(request: PredictRequest):
 

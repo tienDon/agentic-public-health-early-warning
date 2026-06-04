@@ -9,7 +9,7 @@ def health():
     service = get_inference_service()
 
     return {
-        "status": "healthy",
+        "status": service.predictor.health_check(),
         "model_loaded": True,
         "model_version":
             service.predictor.version,

@@ -1,3 +1,4 @@
-LOW = "LOW"
-MEDIUM = "MEDIUM"
-HIGH = "HIGH"
+class RiskLevel:
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
