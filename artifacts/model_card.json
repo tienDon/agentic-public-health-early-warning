@@ -1,0 +1,9 @@
+{
+    "model_name": "Climate Health Risk Predictor",
+    "version": "1.0",
+    "algorithm": "LightGBM + XGBoost Ensemble",
+    "feature_count": 38,
+    "target": "vector_disease_risk_score",
+    "test_r2": 0.8343,
+    "test_mae": 4.2489
+}

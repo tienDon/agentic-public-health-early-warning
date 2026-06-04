@@ -5,7 +5,7 @@ class FeatureSchema:
 
     def __init__(
         self,
-        schema_path="models/feature_schema.joblib"
+        schema_path="artifacts/feature_schema.joblib"
     ):
         self.schema = joblib.load(
             schema_path

@@ -1,54 +1,14 @@
 from fastapi import FastAPI
-import pandas as pd
-# import sys
-# import os
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from app.api import routes, health
+from app.api.errors import global_exception_handler, app_exception_handler
+from src.core.exceptions import PredictionError
 
-from app.schemas import PredictRequest
-from app.dependencies import get_inference_service
-from services.inference_service import InferenceService
 app = FastAPI(title="Climate Health Risk API", version="1.0")
 
-service = get_inference_service()
+# Đăng ký bộ xử lý lỗi toàn cục
+app.add_exception_handler(PredictionError, app_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
 
-
-# =========================
-# HEALTH CHECK
-# =========================
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "service": "climate-risk-api"
-    }
-
-
-# =========================
-# PREDICT ENDPOINT
-# =========================
-@app.post("/predict")
-def predict(request: PredictRequest):
-
-    # convert input → DataFrame
-    df = pd.DataFrame([request.data])
-
-    # call inference pipeline
-    state = service.predict(df)
-
-    # nếu lỗi
-    if "failed" in state.status:
-        return {
-            "status": "error",
-            "message": state.status
-        }
-
-    # response chuẩn
-    return {
-        "risk_score": state.risk_score,
-        "risk_level": state.risk_level,
-        "confidence": state.confidence,
-        "explanation": state.explanation,
-        "alert_message": state.alert_message,
-        "model_version": state.model_version,
-        "status": state.status
-    }
+# Nạp các router
+app.include_router(health.router)
+app.include_router(routes.router)

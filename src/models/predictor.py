@@ -1,6 +1,6 @@
 import joblib
 import numpy as np
-from features.missing_feature_checker import (
+from src.features.missing_feature_checker import (
     MissingFeatureChecker
 )
 class RiskPredictor:

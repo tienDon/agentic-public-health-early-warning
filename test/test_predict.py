@@ -39,7 +39,7 @@ X_test, _ = build_feature_matrix(
 # ==================================================
 
 predictor = RiskPredictor(
-    "models/ensemble_bundle.joblib"
+    "artifacts/ensemble_bundle.joblib"
 )
 
 # ==================================================

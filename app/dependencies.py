@@ -1,4 +1,4 @@
-from services.inference_service import InferenceService
+from src.services.inference_service import InferenceService
 
 inference_service = InferenceService()
 
