@@ -1,0 +1,42 @@
+# Data Manipulation & Core Mathematics
+pandas
+numpy
+scipy
+
+# Visualization & Explainable AI (XAI)
+matplotlib
+seaborn
+shap
+streamlit
+
+# Machine Learning & Baseline Models
+scikit-learn
+joblib
+
+# Gradient Boosting Stack 
+xgboost
+lightgbm
+catboost
+
+# Automated Hyperparameter Tuning 
+optuna
+
+# Environment & Jupyter Notebook Ecosystem
+python-dotenv
+ipykernel
+
+# API & Web Stack
+fastapi
+uvicorn
+pydantic
+starlette
+python-multipart
+
+# Deployment
+gunicorn
+
+# Utils
+typing-extensions
+httpx
+orjson
+tqdm
