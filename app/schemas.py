@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
-
+from src.schemas.recommendation_schema import RecommendationItem
+from src.schemas.explanation_schema import ExplanationItem
 class PredictRequest(BaseModel):
     data: Dict[str, float]
 
@@ -45,16 +46,9 @@ class ModelInfoResponse(BaseModel):
     feature_count: int
     ensemble: bool
 
-class ExplanationItem(BaseModel):
-    rank: int       
-    feature: str
-    impact: float
-    direction: str
-    reason: str
 
-class RecommendationItem(BaseModel):
-    priority: str   # (HIGH, MEDIUM, LOW)
-    action: str
+
+
 
 
 
