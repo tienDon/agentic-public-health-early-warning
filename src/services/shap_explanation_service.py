@@ -1,6 +1,6 @@
 import shap
 import pandas as pd
-
+from src.core.exceptions import ExplainabilityError
 FEATURE_DESCRIPTIONS = {
     "temp_rolling_4wk_mean": "Sustained high temperature trend",
     "temperature_celsius_lag_1": "Recent temperature anomaly",
@@ -10,7 +10,7 @@ FEATURE_DESCRIPTIONS = {
     "precip_vulnerability_interact": "Climate vulnerability interaction",
     "heat_related_admissions": "Heat-related health burden elevated"
 }
-
+TOP_EXPLANATION_FEATURES = 3
 class ShapExplanationService:
     def __init__(self, model, feature_names):
         self.explainer = shap.TreeExplainer(model)
@@ -18,12 +18,14 @@ class ShapExplanationService:
 
     def explain(self, X):
         """Tính toán raw SHAP values."""
-        shap_values = self.explainer.shap_values(X)
-        if isinstance(X, pd.DataFrame):
-            return pd.DataFrame(shap_values, columns=self.feature_names)
-        return shap_values
+        try:
+            shap_values = self.explainer.shap_values(X)
+            shap_df = pd.DataFrame(shap_values, columns=self.feature_names)
+            return shap_df
+        except Exception as e:
+            raise ExplainabilityError(f"Failed to compute SHAP values: {str(e)}")
 
-    def explain_prediction(self, X, index=0, top_n=3):
+    def explain_prediction(self, X, index=0, top_n=TOP_EXPLANATION_FEATURES):
         """
         FIX 1 & 4: Khớp Contract và chuẩn hóa Schema thành một List[Dict] duy nhất.
         """
@@ -39,9 +41,15 @@ class ShapExplanationService:
                 feat, 
                 feat.replace("_", " ").capitalize()
             )
+            direction = (
+                "increase_risk"
+                if actual_shap[feat] > 0
+                else "decrease_risk"
+            )
             explanations.append({
                 "feature": feat,
                 "impact": round(float(actual_shap[feat]), 4),
-                "reason": reason
+                "direction": direction,
+                "reason": reason,
             })
         return explanations

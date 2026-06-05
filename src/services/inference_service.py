@@ -5,20 +5,24 @@ from src.services.shap_explanation_service import ShapExplanationService
 from src.services.report_service import ReportService
 from src.features.feature_validator import FeatureValidator
 from src.services.risk_service import RiskService
+from src.services.llm_explanation_service import LLMExplanationService
+from src.services.recommendation_service import RecommendationService
 class InferenceService:
 
     def __init__(
             self,
-        predictor,
-        validator,
-        shap_service,
-        alert_service
+        predictor: RiskPredictor,
+        validator: FeatureValidator,
+        shap_service: ShapExplanationService,
+        alert_service: AlertService
     ):
 
         self.predictor = predictor
         self.validator = validator
         self.shap_service = shap_service
         self.alert_service = alert_service
+        self.explanation_agent = LLMExplanationService()
+        self.recommendation_service = RecommendationService()
 
     def predict(self, X):
 
@@ -40,12 +44,16 @@ class InferenceService:
         # 4. Pipeline XAI (SHAP)
         shap_insights = self.shap_service.explain_prediction(X_clean)
 
+        for idx, item in enumerate(shap_insights):
+            item["rank"] = idx + 1
+
         state = PredictionState(
             input_data=X.to_dict("records")[0],
             risk_score=round(score, 2),
             risk_level=risk_level,
             confidence=confidence,
-            model_version=self.predictor.version,
+            model_version=self.predictor.model_version,
+            model_used=self.predictor.model_name,
             explanation=shap_insights, 
             status="completed"
         )
@@ -55,5 +63,39 @@ class InferenceService:
             confidence=state.confidence
         )
 
+        try:
+            state.llm_explanation = (
+                self.explanation_agent.explain(state)
+            )
+        except Exception:
+            state.llm_explanation = (
+                "Unable to generate AI explanation."
+            )
+
+        state.recommendations = (
+            self.recommendation_service.recommend(
+                state
+            )
+        )   
         return state
 
+    def predict_batch(self, X):
+        results = []
+
+        for i in range(len(X)):
+
+            state = self.predict(
+                X.iloc[[i]]
+            )
+
+            results.append(state)
+
+        return results
+    
+
+
+
+
+
+
+    

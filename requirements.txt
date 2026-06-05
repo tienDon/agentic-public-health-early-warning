@@ -40,3 +40,9 @@ typing-extensions
 httpx
 orjson
 tqdm
+
+langchain
+
+# LLMs & Vector Databases
+langchain-groq
+langchain-google-genai

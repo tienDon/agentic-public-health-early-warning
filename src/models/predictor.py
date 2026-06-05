@@ -11,6 +11,14 @@ class RiskPredictor:
         self.version = bundle.get("version", "unknown")
         self.target = bundle.get("target", None)
 
+    @property
+    def model_version(self) -> str:
+        return self.version
+    
+    @property
+    def model_name(self) -> str:
+        return "ensemble" if self.xgb_model is not None else "lightgbm"
+    
     def health_check(self):
         return {
             "status": "healthy" if self.lgb_model is not None else "unhealthy",

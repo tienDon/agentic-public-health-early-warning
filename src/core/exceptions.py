@@ -11,3 +11,10 @@ class FeatureValidationError(PredictionError):
 class ModelNotLoadedError(PredictionError):
     """Lỗi khi file mô hình (.joblib/.pkl) chưa được nạp thành công"""
     pass
+
+class PredictionFailedError(PredictionError):
+    pass
+
+
+class ExplainabilityError(PredictionError):
+    pass

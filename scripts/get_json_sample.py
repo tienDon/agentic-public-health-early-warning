@@ -11,9 +11,8 @@ drop_cols = metadata_cols + synthetic_leakage_cols
 X = df.drop(columns=[c for c in drop_cols if c in df.columns])
 
 # Lấy dòng đầu tiên và chuyển thành dict
-sample_dict = X.iloc[0].to_dict()
+sample_dict = X.iloc[1637].to_dict()
 
 # In ra màn hình dạng JSON
 print(json.dumps(sample_dict, indent=4))
 print("length of sample_dict:", len(sample_dict))
-print(sample_dict.describe())

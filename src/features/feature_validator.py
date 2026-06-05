@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from src.core.exceptions import FeatureValidationError
 
 class FeatureValidator:
 
@@ -15,13 +16,13 @@ class FeatureValidator:
     def validate_features(self, X: pd.DataFrame):
         missing = [f for f in self.expected_features if f not in X.columns]
         if missing:
-            raise ValueError(f"Missing features: {missing}")
+            raise FeatureValidationError(f"Missing features: {missing}")
         return True
 
     # 2. Check NaN values
     def validate_missing_values(self, X: pd.DataFrame):
         if X.isnull().sum().sum() > 0:
-            raise ValueError("Input contains missing values (NaN)")
+            raise FeatureValidationError("Input contains missing values (NaN)")
         return True
 
     # 3. Check numeric type
@@ -32,7 +33,7 @@ class FeatureValidator:
         ]
 
         if non_numeric:
-            raise ValueError(f"Non-numeric features detected: {non_numeric}")
+            raise FeatureValidationError(f"Non-numeric features detected: {non_numeric}")
 
         return True
 
@@ -49,7 +50,7 @@ class FeatureValidator:
                 mismatched.append((col, expected_dtype, actual_dtype))
 
         if mismatched:
-            raise ValueError(f"Schema mismatch: {mismatched}")
+            raise FeatureValidationError(f"Schema mismatch: {mismatched}")
 
         return True
 

@@ -1,6 +1,12 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
-from src.core.exceptions import PredictionError, FeatureValidationError, ModelNotLoadedError
+from src.core.exceptions import (
+    PredictionError,
+    FeatureValidationError,
+    ModelNotLoadedError,
+    PredictionFailedError,
+    ExplainabilityError
+)
 
 async def global_exception_handler(request: Request, exc: Exception):
     """Bắt toàn bộ các lỗi không xác định (Lỗi code bug, hệ thống...)"""
@@ -24,6 +30,12 @@ async def app_exception_handler(request: Request, exc: PredictionError):
     elif isinstance(exc, ModelNotLoadedError):
         status_code = status.HTTP_503_SERVICE_UNAVAILABLE
         error_type = "ModelAvailabilityError"
+    elif isinstance(exc, PredictionFailedError):
+        status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        error_type = "PredictionFailed"
+    elif isinstance(exc, ExplainabilityError):
+        status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        error_type = "ExplainabilityError"
     else:
         status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         error_type = "PredictionError"
@@ -36,3 +48,4 @@ async def app_exception_handler(request: Request, exc: PredictionError):
             "message": exc.message
         }
     )
+
