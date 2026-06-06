@@ -43,7 +43,7 @@ tqdm
 python-json-logger
 
 langchain
-
+langgraph
 # LLMs & Vector Databases
 langchain-groq
 langchain-google-genai

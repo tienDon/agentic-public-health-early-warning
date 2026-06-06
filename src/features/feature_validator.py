@@ -45,8 +45,11 @@ class FeatureValidator:
         mismatched = []
 
         for col, expected_dtype in self.feature_schema.items():
+            if col not in X.columns:
+                continue
+
             actual_dtype = str(X[col].dtype)
-            if col in X.columns and actual_dtype != expected_dtype:
+            if actual_dtype != expected_dtype:
                 mismatched.append((col, expected_dtype, actual_dtype))
 
         if mismatched:

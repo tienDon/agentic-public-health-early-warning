@@ -51,6 +51,7 @@ class RiskPredictor:
             pred_log = pred_lgb_log
 
         # Inverse log và clip
+        # Current project assumes risk score scale 0-100
         pred_real = np.clip(np.expm1(pred_log), 0, 100)
         
         # Trả về cả kết quả raw để InferenceService tự tính confidence
