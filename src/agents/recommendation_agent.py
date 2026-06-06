@@ -37,9 +37,9 @@ class RecommendationAgent(BaseLLMAgent):
     def run(self, state):
         try:
             # Kiểm tra nhanh điều kiện tối ưu token (Early return với fallback tĩnh)
-            bad_drivers = [item for item in state.explanation if item.get("impact", 0) > 0]
-            if not bad_drivers and state.risk_level == "LOW":
-                state.recommendations = self._get_fallback_recommendations(state.risk_level)
+            bad_drivers = [item for item in state["explanation"] if item.get("impact", 0) > 0]
+            if not bad_drivers and state["risk_level"] == "LOW":
+                state["recommendations"] = self._get_fallback_recommendations(state["risk_level"])
                 return state
 
             # 1. Gọi Prompt Builder tách biệt
@@ -50,15 +50,15 @@ class RecommendationAgent(BaseLLMAgent):
             
             # 3. Cập nhật State trực tiếp bằng cách dump data từ object sang dict
             if response and response.recommendations:
-                state.recommendations = response.model_dump()["recommendations"]
+                state["recommendations"] = response.model_dump()["recommendations"]
             else:
                 # Log cảnh báo nếu LLM trả về rỗng một cách bất thường trước khi dùng fallback
                 logger.warning("Recommendation Agent received empty response from LLM. Using fallback.")
-                state.recommendations = self._get_fallback_recommendations(state.risk_level)
+                state["recommendations"] = self._get_fallback_recommendations(state["risk_level"])
 
         except Exception as e:
             logger.error(f"[Error] Recommendation Agent Error: {e}. Using fallback.")
-            state.recommendations = self._get_fallback_recommendations(state.risk_level)
-            
+            state["recommendations"] = self._get_fallback_recommendations(state["risk_level"])
+
         # 4. Luôn trả về State object
         return state

@@ -1,3 +1,4 @@
+# app/schemas.py
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 from src.schemas.recommendation_schema import RecommendationItem
@@ -16,7 +17,7 @@ class PredictResponse(BaseModel):
     recommendations: Optional[List[RecommendationItem]] = None
     model_version: str
     model_used: str
-    prediction_time: str
+    prediction_time: Optional[str] = None
 
 class BatchPredictRequest(BaseModel):
     data: List[Dict[str, float]]
@@ -26,6 +27,8 @@ class BatchPredictItem(BaseModel):
     risk_level: str
     confidence: float
     alert: str
+    llm_explanation: Optional[str] = None          # Trích từ state["llm_explanation"]
+    top_recommendation: Optional[str] = None
 
 
 class BatchPredictResponse(BaseModel):

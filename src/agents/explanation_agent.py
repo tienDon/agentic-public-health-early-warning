@@ -24,15 +24,15 @@ class ExplanationAgent(BaseLLMAgent):
             
             # 3. Cập nhật State trực tiếp từ thuộc tính của Pydantic Object
             if response and response.summary:
-                state.llm_explanation = response.summary
+                state["llm_explanation"] = response.summary
             else:
                 logger.warning("Explanation Agent received empty summary from LLM.")
-                state.llm_explanation = "No explanation summary provided by AI."
+                state["llm_explanation"] = "No explanation summary provided by AI."
                 
         except Exception as e:
             # ĐỒNG NHẤT: Tránh làm sập luồng LangGraph, gán fallback khi có lỗi
             logger.error(f"[Error] Explanation Agent Error: {e}")
-            state.llm_explanation = "Unable to generate AI explanation due to an error."
+            state["llm_explanation"] = "Unable to generate AI explanation due to an error."
             
         # 4. Luôn trả về State object đúng chuẩn LangGraph
         return state

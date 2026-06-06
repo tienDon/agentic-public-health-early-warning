@@ -10,10 +10,19 @@ class BaseLLMAgent(BaseAgent):
 
     def __init__(self):
 
-        os.environ["GOOGLE_API_KEY"] = (
-            os.getenv("GOOGLE_API_KEY")
+        # os.environ["GOOGLE_API_KEY"] = (
+        #     os.getenv("GOOGLE_API_KEY")
+        # )
+
+        # self.model = init_chat_model(
+        #     "google_genai:gemini-2.5-flash"
+        # )
+        os.environ["GROQ_API_KEY"] = (
+            os.getenv("GROQ_API_KEY")
         )
 
         self.model = init_chat_model(
-            "google_genai:gemini-2.5-flash"
+            model="llama-3.3-70b-versatile",
+            model_provider="groq",
+            temperature=0.1
         )

@@ -3,7 +3,7 @@ class RecommendationPrompt:
     @staticmethod
     def build(state) -> str:
         bad_drivers = []
-        for item in state.explanation:
+        for item in state["explanation"]:
             if item.get("impact", 0) > 0:
                 bad_drivers.append(f"- {item.get('feature')}: {item.get('reason')}")
 
@@ -11,8 +11,8 @@ class RecommendationPrompt:
             You are an expert Public Health Action & Recommendation Agent.
             Your task is to provide exactly 2 to 3 highly actionable public health recommendations based on the current climate risk assessment.
 
-            Current Risk Level: {state.risk_level}
-            Current Risk Score: {state.risk_score}
+            Current Risk Level: {state["risk_level"]}
+            Current Risk Score: {state["risk_score"]}
 
             Top Climate/Environmental Drivers Increasing the Risk:
             {chr(10).join(bad_drivers) if bad_drivers else "- Baseline environmental conditions."}

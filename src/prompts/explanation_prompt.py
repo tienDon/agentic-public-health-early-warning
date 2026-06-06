@@ -3,7 +3,7 @@ class ExplanationPrompt:
     @staticmethod
     def build(state) -> str:
         factors = []
-        for item in state.explanation:
+        for item in state["explanation"]:
             feature = item.get("feature", "Unknown")
             impact = item.get("impact", 0.0)
             reason = item.get("reason", "")
@@ -15,9 +15,9 @@ class ExplanationPrompt:
             You are an expert public health risk analyst. Your task is to synthesize environmental and climate data into a clear, non-technical explanation for the public.
 
             [INPUT DATA]
-            - Overall Risk Level: {state.risk_level}
-            - Risk Score: {state.risk_score}
-            - Confidence Level: {state.confidence}
+            - Overall Risk Level: {state["risk_level"]}
+            - Risk Score: {state["risk_score"]}
+            - Confidence Level: {state["confidence"]}
 
             [TOP FACTORS ANALYZED]
             {chr(10).join(factors) if factors else "- No specific climate drivers detected."}

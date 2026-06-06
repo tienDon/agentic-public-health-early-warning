@@ -2,6 +2,7 @@ import logging
 from src.services.risk_service import RiskService
 from src.schemas.graph_state import PredictionState
 import pandas as pd
+from datetime import datetime
 logger = logging.getLogger(__name__)
 
 class PredictNode:
@@ -23,6 +24,8 @@ class PredictNode:
             pred_result = self.predictor.predict(df)
             score = pred_result["score"]
             
+            current_time_iso = datetime.utcnow().isoformat() + "Z"
+
             # 3. Chỉ trả về những trường thay đổi để LangGraph cập nhật State
             return {
                 "risk_score": round(score, 2),
@@ -33,6 +36,7 @@ class PredictNode:
                 ),
                 "model_version": self.predictor.model_version,
                 "model_used": pred_result["model_used"],
+                "prediction_time": current_time_iso,
                 "status": "predicted"
             }
         except Exception as e:
